@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  {% block meta %}
+  <!-- block meta --> {% endblock %}
+  <title>{% block title %} ? {% endblock %} - 尹伟豪的官方网站</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="shortcut icon" href="/static/favicon.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/css/uikit.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js"></script>
+  {% block beforehead %}
+  <!-- before head  -->{% endblock %}
+</head>
+
+<body>
+  <div uk-sticky="show-on-up: true; animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent;" class="uk-margin-medium-bottom uk-sticky uk-light">
+    <nav class="uk-navbar uk-background-primary" uk-navbar>
+      <div class="uk-navbar-left">
+        <a href="/" class="uk-navbar-item uk-logo">尹 伟 豪</a>
+        <ul class="uk-navbar-nav uk-navbar-item uk-visible@m">
+        {% block navbar %}
+          <li><a href="/"> 首页</a></li>
+          <li><a href="/atlas"> 图册</a></li>
+          <li><a href="/about"> 关于</a></li>
+          {% endblock %}
+        </ul>
+      </div>
+      <div class="uk-navbar-right">
+        <div class="uk-navbar-item">
+          {% if user %}
+          <button onclick="location.href='/users/{{ user.id }}'" class="uk-button uk-button-text"> {{ user.name }} </button>
+          &nbsp;&nbsp;
+          <a href="/users/{{ user.id }}"><img src="{{ user.image }}" width="50" height="50" class="uk-border-circle" /></a>
+          
+          <a href="/signout" class="uk-button uk-button-primary uk-margin-small-left uk-border-pill"> 登出</a>
+          {% else %}
+          <a href="/signin" class="uk-button uk-button-text"> 登录</a>
+          <a href="/register" class="uk-button uk-button-primary uk-margin-small-left uk-border-pill"> 注册</a>
+          {% endif %}
+      </div>
+    </div>
+    </nav>
+  </div>
+
+  <div class="uk-container uk-container-center">
+    <div class="uk-grid">
+      <!-- content -->
+      {% block content %}
+      {% endblock %}
+      <!-- // content -->
+    </div>
+  </div>
+
+  <div class="uk-margin-large-top" style="background-color:#eee; border-top:1px solid #ccc;">
+    <div class="uk-container uk-container-center uk-text-center">
+      <div class="uk-panel uk-margin-top uk-margin-bottom">
+        <p>Powered by <a href="https://flask.palletsprojects.com">Flask</a> & <a href="https://www.getuikit.com">Uikit</a></p>
+        <p>尹伟豪 <a href="/manage">管理</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

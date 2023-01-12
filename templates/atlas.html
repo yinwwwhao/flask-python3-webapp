@@ -1,0 +1,40 @@
+{% extends '__base__.html' %}
+
+{% block title %}图册{% endblock %}
+
+{% block navbar %}
+<li><a href="/"> 首页</a></li>
+<li class="uk-active"><a href="/atlas/public"> 图册</a></li>
+<li><a href="/about"> 关于</a></li>
+{% endblock %}
+
+{% block content %}
+<div id="atlas">
+    {% for i in image %}
+    <img data-src="{{ i.url }}" width="200" uk-img>
+    {% else %}
+    <h2>暂无内容。。。</h2>
+    {% endfor %}
+</div>
+{% if image %}
+<ul class="uk-pagination uk-flex-center uk-width-1-1">
+    <li><a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a></li>
+    {% for i in range(1, page.page_count+1) %}
+    {% if i == 3 %}
+        <li class="uk-disabled"><span>...</span></li>
+    {% elif i > 3 %}
+    {% elif i == page.page_index %}
+    <li class="uk-active"><span>{{ i }}</span></li>
+    {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+    <li><a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a></li>
+</ul>
+{% endif %}
+{% if user.admin %}
+<div class="uk-align-center uk-margin">
+<a href="/atlas/private">切换至私有图册</a>
+</div>
+{% endif %}
+{% endblock %}

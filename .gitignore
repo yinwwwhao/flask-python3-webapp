@@ -1,0 +1,8 @@
+*.log
+configs.py
+env/
+.vscode/
+*/__pycache__/
+__pycache__/
+*.py[cod]
+run.bat

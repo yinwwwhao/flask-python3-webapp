@@ -1,0 +1,89 @@
+{% extends '__base__.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block navbar %}
+<li class="uk-active"><a href="/"> 首页</a></li>
+<li><a href="/atlas/public"> 图册</a></li>
+<li><a href="/about"> 关于</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="uk-width-1-1 uk-width-2-3@s uk-first-column">
+        {% for blog in blogs %}
+            <article class="uk-article">
+                <h2><a href="/blogs/{{ blog.id }}">{{ blog.name }}</a></h2>
+                <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
+                <p>{{ blog.summary }}</p>
+                <p><a href="/blogs/{{ blog.id }}">继续阅读 <i class="uk-icon-link" uk-icon="chevron-right"></i></a></p>
+            </article>
+            <hr class="uk-article-divider">
+            
+        {% else %}
+        <h2>暂无内容。。。</h2>
+        {% endfor %}
+        {% if blogs %}
+            <ul class="uk-pagination uk-flex-center">
+                {% if tag %}
+                <li><a href="?page={{ page.page_index-1 }}&tag={{ tag }}"><span uk-pagination-previous></span></a></li>
+                {% else %}
+                <li><a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a></li>
+                {% endif %}
+                {% for i in range(1, page.page_count+1) %}
+                {% if i == 3 %}
+                    <li class="uk-disabled"><span>...</span></li>
+                {% elif i > 3 %}
+                {% elif i == page.page_index %}
+                <li class="uk-active"><span>{{ i }}</span></li>
+                {% elif tag %}
+                    <li><a href="?page={{ i }}&tag={{ tag }}">{{ i }}</a></li>
+                {% else %}
+                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if tag %}
+                <li><a href="?page={{ page.page_index+1 }}&tag={{ tag }}"><span uk-pagination-next></span></a></li>
+                {% else %}
+                <li><a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    </div>
+<div class="uk-width-1-1 uk-width-1-3@s">
+    <div class="uk-card uk-card-default uk-card-hover">
+    <div class="uk-card-header">
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+            <div class="uk-width-auto">
+                <img class="uk-border-circle" width="50" height="50" src="/static/images/author.png">
+            </div>
+            <div class="uk-width-expand">
+                <h3 class="uk-card-title uk-margin-remove-bottom">尹伟豪</h3>
+                <p class="uk-text-meta uk-margin-remove-top">非常帅</p>
+            </div>
+    </div>
+    <div class="uk-card-body">
+        <p>除了帅以外没法形容，学霸一枚，整天除了学习就是学习（这个网站是怎么回事？）日常爱好吉他，电脑，素描</p>
+    </div>
+    <div class="uk-card-footer">
+        <a href="/about#author" class="uk-button uk-button-text">读到更多<span class="uk-margin-small-right uk-icon" uk-icon="chevron-right"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="chevron-right"><polyline fill="none" stroke="#000" stroke-width="1.03" points="7 4 13 10 7 16"></polyline></svg></span></a>
+    </div>
+</div>
+    </div>
+    <div class="uk-card uk-card-body">
+        <h3>标签</h3>
+        <table class="uk-table uk-table-striped">
+            <tbody>
+        {% for tag in tags %}
+            <tr>
+                <td align="left"><i uk-icon="tag"></i><a href="?tag={{ tag.name }}"> {{ tag.name }}</a></td>
+                <td align="right"><span class="uk-badge">{{ tag.int }}</span></td>
+            </tr>
+        {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+{% endblock %}
