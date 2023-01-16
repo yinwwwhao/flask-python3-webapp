@@ -2,11 +2,13 @@
 beforehead %}
 <script>
     $(function () {
-        var upload = new Vue({
-            el: "#upload-file",
-            data: {
-                name: "",
-                private: false,
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    name: "",
+                    private: false,
+                };
             },
             methods: {
                 submit: function () {
@@ -69,10 +71,11 @@ beforehead %}
                     reader.readAsDataURL(file);
                 },
             },
-        });
-        var vm = new Vue({
-            el: "#vm",
-            data: {},
+        }).mount("#upload-file");
+        createApp({
+            data() {
+                return {};
+            },
             methods: {
                 delete_image: function (i, u) {
                     if (confirm("确认要删除“" + i + "”？删除后不可恢复！")) {
@@ -105,7 +108,7 @@ beforehead %}
                     );
                 },
             },
-        });
+        }).mount("app");
     });
 </script>
 {% endblock %} {% block content %}
@@ -129,7 +132,7 @@ beforehead %}
                 type="file"
                 accept="image/*"
                 multiple
-                v-on:change="loadimg"
+                @change="loadimg"
             />
             <button class="uk-button uk-button-default" type="button">
                 上传
@@ -146,7 +149,7 @@ beforehead %}
         <button
             class="uk-button uk-button-default"
             type="button"
-            v-on:click="submit"
+            @click="submit"
         >
             提交
         </button>
@@ -157,7 +160,7 @@ beforehead %}
     </form>
 </div>
 
-<div id="vm" class="uk-width-1-1 uk-margin">
+<div id="app" class="uk-width-1-1 uk-margin">
     <table class="uk-table uk-table-striped">
         <thead>
             <tr>
@@ -173,7 +176,7 @@ beforehead %}
                 <td>
                     <a target="_blank" href="{{ i.url }}"
                         >{{ i.name }}
-                        <a v-on:click="rename({{ i.name }})"
+                        <a @click="rename({{ i.name }})"
                             ><i uk-icon="file-edit"></i
                         ></a>
                     </a>
@@ -187,15 +190,15 @@ beforehead %}
                 <td>
                     <a
                         href="#"
-                        v-on:click="delete_image('{{ i.name }}', '{{ i.url }}')"
+                        @click="delete_image('{{ i.name }}', '{{ i.url }}')"
                         ><i uk-icon="trash"></i
                     ></a>
                     {% if i.private %}
-                    <a href="#" v-on:click="re_private('{{ i.name }}', false)"
+                    <a href="#" @click="re_private('{{ i.name }}', false)"
                         >更为共有</a
                     >
                     {% else %}
-                    <a href="#" v-on:click="re_private('{{ i.name }}', true)"
+                    <a href="#" @click="re_private('{{ i.name }}', true)"
                         >更为私有</a
                     >
                     {% endif %}

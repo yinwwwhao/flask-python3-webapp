@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/css/uikit.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.prod.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="/static/js/sha1.js"></script>
     <script>
@@ -17,12 +17,14 @@
             var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
             return re.test(email.toLowerCase());
         }
+        const { createApp } = Vue;
         $(function () {
-            var vm = new Vue({
-                el: '#vm',
-                data: {
-                    email: '',
-                    passwd: ''
+            createApp({
+                data() {
+                    return {
+                        email: '',
+                        passwd: ''
+                    };
                 },
                 methods: {
                     submit: function (event) {
@@ -91,7 +93,7 @@
                             });
                     }
                 }
-            });
+            }).mount('#app');
         });
     </script>
 </head>
@@ -103,7 +105,7 @@
             <div class="uk-container" style="max-width: 330px;">
                 <i style="font-size:50px; color: #444;">yinwwwhao</i>
                 <p class="uk-text-lead">登录</p>
-                <form id="vm" v-on:submit="submit" method="post">
+                <form id="app" @submit="submit" method="post">
                     <div class="uk-margin">
                         <div class="uk-inline uk-width-1-1">
                             <span class="uk-form-icon" uk-icon="icon: mail"></span>

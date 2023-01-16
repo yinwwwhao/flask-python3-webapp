@@ -1,23 +1,24 @@
 {% extends '__base__.html' %} {% block title %}管理用户{% endblock %} {% block
 beforehead %}
 <script>
-    var vm;
-        function initVM(data) {
-            vm = new Vue({
-                el: '#vm',
-                data: {
+    const { createApp } = Vue;
+    function initApp(data) {
+        createApp({
+            data() {
+                return {
                     users: data.users,
                     page: data.page
                 }
-            });
-        }
-        $(function() {
+            }
+        }).mount('#app');
+    }
+    $(function() {
             $.get('/api/users', {
-                page: {{ page_index }}
-            }, function (r) {
-                initVM(r);
+                    page: {{ page_index }}
+                }, function (r) {
+                    initApp(r);
+                });
             });
-        });
 </script>
 {% endblock %} {% block content %}
 
@@ -31,7 +32,7 @@ beforehead %}
     </ul>
 </div>
 
-<div id="vm" class="uk-width-1-1 uk-margin">
+<div id="app" class="uk-width-1-1 uk-margin">
     <table class="uk-table uk-table-striped">
         <thead>
             <tr>
@@ -49,10 +50,7 @@ beforehead %}
                     >
                 </td>
                 <td>
-                    <a
-                        v-bind:href="'mailto:'+user.email"
-                        v-text="user.email"
-                    ></a>
+                    <a :href="'mailto:'+user.email" v-text="user.email"></a>
                 </td>
                 <td>
                     <span v-text="user.created_at[1]"></span>

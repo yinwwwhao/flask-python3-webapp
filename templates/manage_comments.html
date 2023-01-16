@@ -1,31 +1,32 @@
 {% extends '__base__.html' %} {% block title %}管理评论{% endblock %} {% block
 beforehead %}
 <script>
-    var vm;
-        function initVM(data) {
-            vm = new Vue({
-                 el: '#vm',
-                data: {
+    const { createApp } = Vue;
+    function initApp(data) {
+        createApp({
+            data() {
+                return {
                     comments: data.comments,
                     page: data.page
-                },
-                methods: {
-                    delete_comment: function (comment) {
-                        if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
-                            $.post('/api/comments/' + comment.id + '/delete', function (r) {
-                                location.reload();
-                            });
-                        }
+                }
+            },
+            methods: {
+                delete_comment: function (comment) {
+                    if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
+                        $.post('/api/comments/' + comment.id + '/delete', function (r) {
+                            location.reload();
+                        });
                     }
                 }
-            });
-        }
-        $(function() {
-            $.get('/api/comments', {
-                page: {{ page_index }}
+            }
+        }).mount('#app');
+    }
+    $(function () {
+        $.get('/api/comments', {
+            page: {{ page_index }}
             }, function (r) {
-                initVM(r);
-            });
+            initApp(r);
+        });
         });
 </script>
 {% endblock %} {% block content %}
@@ -40,7 +41,7 @@ beforehead %}
     </ul>
 </div>
 
-<div id="vm" class="uk-width-1-1 uk-margin">
+<div id="app" class="uk-width-1-1 uk-margin">
     <table class="uk-table uk-table-striped">
         <thead>
             <tr>
@@ -62,7 +63,7 @@ beforehead %}
                     <span v-text="comment.created_at[1]"></span>
                 </td>
                 <td>
-                    <a href="#" v-on:click="delete_comment(comment)"
+                    <a href="#" @click="delete_comment(comment)"
                         ><i uk-icon="trash"></i
                     ></a>
                 </td>

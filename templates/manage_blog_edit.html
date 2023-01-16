@@ -5,29 +5,30 @@ block beforehead %}
     var ID = "{{ id }}",
         action = "{{ action }}",
         vm;
-    function initVM(blog) {
-        vm = new Vue({
-            el: "#vm",
-            data: blog,
+    const { createApp } = Vue;
+    function initApp(blog) {
+        createApp({
+            data() {
+                return blog;
+            },
             methods: {
-                submit: function (event) {
-                    event.preventDefault();
+                submit: function () {
                     $.post(action, this.$data, function (r) {
                         return location.assign("/");
                         // return location.assign('/api/blogs/' + r.id);
                     });
                 },
             },
-        });
+        }).mount("#app");
     }
     $(function () {
         if (ID) {
             $.get("/api/blogs/" + ID, function (blog) {
                 blog.id = ID;
-                initVM(blog);
+                initApp(blog);
             });
         } else {
-            initVM({
+            initApp({
                 name: "",
                 summary: "",
                 content: "",
@@ -47,8 +48,8 @@ block beforehead %}
     </ul>
 </div>
 
-<div id="vm" class="uk-width-1-1">
-    <form v-on:submit="submit" class="uk-form uk-form-stacked">
+<div id="app" class="uk-width-1-1">
+    <form @submit.prevent="submit" class="uk-form uk-form-stacked">
         <div class="uk-margin">
             <label class="uk-form-label" for="name">标题:</label>
             <div class="uk-form-controls">

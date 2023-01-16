@@ -1,15 +1,16 @@
 {% extends '__base__.html' %} {% block title %}管理博客{% endblock %} {% block
 beforehead %}
 <script>
-    var vm;
-        function initVM(data) {
-            vm = new Vue({
-                el: '#vm',
-                data: {
+    const { createApp } = Vue;
+    function initApp(data) {
+        createApp({
+            data() {
+                return {
                     blogs: data.blogs,
                     page: data.page
-                },
-                methods: {
+                }
+            },
+            methods: {
                     edit_blog: function (blog) {
                         location.assign('/manage/blogs/edit?id=' + blog.id);
                     },
@@ -20,16 +21,16 @@ beforehead %}
                             });
                         }
                     }
-                }
-            });
-        }
-        $(function() {
-            $.get('/api/blogs', {
-                page: {{ page_index }}
-            }, function (r) {
-                initVM(r);
-            });
+            }
+        }).mount('#app');
+    }
+    $(function() {
+        $.get('/api/blogs', {
+            page: {{ page_index }}
+        }, function (r) {
+            initApp(r);
         });
+    });
 </script>
 {% endblock %} {% block content %}
 
@@ -43,7 +44,7 @@ beforehead %}
     </ul>
 </div>
 
-<div id="vm" class="uk-width-1-1 uk-margin">
+<div id="app" class="uk-width-1-1 uk-margin">
     <a href="/manage/blogs/create" class="uk-button uk-button-primary"
         ><i uk-icon="plus"></i> 新博客</a
     >
@@ -61,14 +62,14 @@ beforehead %}
                 <td>
                     <a
                         target="_blank"
-                        v-bind:href="'/blogs/'+blog.id"
+                        :href="'/blogs/'+blog.id"
                         v-text="blog.name"
                     ></a>
                 </td>
                 <td>
                     <a
                         target="_blank"
-                        v-bind:href="'/users/'+blog.user_id"
+                        :href="'/users/'+blog.user_id"
                         v-text="blog.user_name"
                     ></a>
                 </td>
@@ -76,10 +77,10 @@ beforehead %}
                     <span v-text="blog.created_at[1]"></span>
                 </td>
                 <td>
-                    <a href="#" v-on:click="edit_blog(blog)"
+                    <a href="#" @click="edit_blog(blog)"
                         ><i uk-icon="file-edit"></i
                     ></a>
-                    <a href="#" v-on:click="delete_blog(blog)"
+                    <a href="#" @click="delete_blog(blog)"
                         ><i uk-icon="trash"></i
                     ></a>
                 </td>
