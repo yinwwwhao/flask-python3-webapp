@@ -1,94 +1,114 @@
-{% extends '__base__.html' %}
-
-{% block title %}{{ blog.name }}{% endblock %}
-
-{% block beforehead %}
+{% extends '__base__.html' %} {% block title %}{{ blog.name }}{% endblock %} {%
+block beforehead %}
 <script>
+    var comment_url = "/api/blogs/{{ blog.id }}/comments";
 
-var comment_url = '/api/blogs/{{ blog.id }}/comments';
-
-$(function() {
-    var $form = $('#form-comment');
-    $form.submit(function (e) {
-        e.preventDefault();
-        var content = $form.find('textarea').val().trim();
-        if (content==='') {
-            return alert('请输入评论内容！');
-        }
-        $.post(comment_url, { content: content }, function (r) {
-            location.reload();
+    $(function () {
+        var $form = $("#form-comment");
+        $form.submit(function (e) {
+            e.preventDefault();
+            var content = $form.find("textarea").val().trim();
+            if (content === "") {
+                return alert("请输入评论内容！");
+            }
+            $.post(comment_url, { content: content }, function (r) {
+                location.reload();
+            });
         });
     });
-});
-
 </script>
 
-{% endblock %}
+{% endblock %} {% block content %}
 
-{% block content %}
+<div class="uk-width-medium-3-4">
+    <article class="uk-article">
+        <h2>{{ blog.name }}</h2>
+        <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
+        <p class="uk-article-meta">
+            作者：<img
+                class="uk-border-circle"
+                width="50"
+                height="50"
+                src="{{ blog.user_image }}"
+            />
+            {{ blog.user_name }}
+        </p>
+        <p class="uk-article-meta">
+            标签：<span style="color: green"> {{ blog.tag }}</span>
+        </p>
+        <hr class="uk-article-divider" />
+        {{ blog.content|safe }}
+    </article>
 
-    <div class="uk-width-medium-3-4">
-        <article class="uk-article">
-            <h2>{{ blog.name }}</h2>
-            <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
-            <p class="uk-article-meta">作者：<img class="uk-border-circle" width="50" height="50" src="{{ blog.user_image }}" />
-                {{ blog.user_name }}</p>
-            <p class="uk-article-meta">标签：<span style="color: green"> {{ blog.tag }}</span></p>
-            <hr class="uk-article-divider">
-            {{ blog.content|safe }}
-        </article>
-
-        <hr class="uk-article-divider">
+    <hr class="uk-article-divider" />
 
     {% if user %}
-        <h3>发表评论</h3>
+    <h3>发表评论</h3>
 
-        <article class="uk-comment">
-            <header class="uk-comment-header">
-                <img class="uk-border-circle" width="50" height="50" src="{{ user.image }}">
-                <h4 class="uk-comment-title">{{ user.name }}</h4>
-            </header>
-            <div class="uk-comment-body">
-                <form id="form-comment" class="uk-form">
-                    <div class="uk-margin">
-                        <textarea class="uk-textarea" rows="6" placeholder="说点什么吧" style="width:100%;resize:none;"></textarea>
-                    </div>
-                    <div class="uk-margin">
-                        <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-comment"></i> 发表评论</button>
-                    </div>
-                    <div class="uk-margin">
-                        <p>评论发表使用Markdown格式，换行请打两个回车</p>
-                    </div>
-                </form>
-            </div>
-        </article>
+    <article class="uk-comment">
+        <header class="uk-comment-header">
+            <img
+                class="uk-border-circle"
+                width="50"
+                height="50"
+                src="{{ user.image }}"
+            />
+            <h4 class="uk-comment-title">{{ user.name }}</h4>
+        </header>
+        <div class="uk-comment-body">
+            <form id="form-comment" class="uk-form">
+                <div class="uk-margin">
+                    <textarea
+                        class="uk-textarea"
+                        rows="6"
+                        placeholder="说点什么吧"
+                        style="width: 100%; resize: none"
+                    ></textarea>
+                </div>
+                <div class="uk-margin">
+                    <button type="submit" class="uk-button uk-button-primary">
+                        <i class="uk-icon-comment"></i> 发表评论
+                    </button>
+                </div>
+                <div class="uk-margin">
+                    <p>评论发表使用Markdown格式，换行请打两个回车</p>
+                </div>
+            </form>
+        </div>
+    </article>
 
-        <hr class="uk-article-divider">
+    <hr class="uk-article-divider" />
     {% endif %}
 
-        <h3>最新评论</h3>
+    <h3>最新评论</h3>
 
-        <ul class="uk-comment-list">
-            {% for comment in comments %}
-            <li>
-                <article class="uk-comment">
-                    <header class="uk-comment-header">
-                        <img class="uk-comment-avatar uk-border-circle" width="50" height="50" src="{{ comment.user_image }}">
-                        <h4 class="uk-comment-title">{{ comment.user_name }} {% if comment.user_id==blog.user_id %}(作者){% endif %}</h4>
-                        <p class="uk-comment-meta">{{ comment.created_at|datetime }}</p>
-                    </header>
-                    <div class="uk-comment-body">
-                        {{ comment.content|safe }}
-                    </div>
-                    <hr class="uk-article-divider">
-                </article>
-            </li>
-            {% else %}
-            <p>还没有人评论...</p>
-            {% endfor %}
-        </ul>
-
-    </div>
-
+    <ul class="uk-comment-list">
+        {% for comment in comments %}
+        <li>
+            <article class="uk-comment">
+                <header class="uk-comment-header">
+                    <img
+                        class="uk-comment-avatar uk-border-circle"
+                        width="50"
+                        height="50"
+                        src="{{ comment.user_image }}"
+                    />
+                    <h4 class="uk-comment-title">
+                        {{ comment.user_name }} {% if
+                        comment.user_id==blog.user_id %}(作者){% endif %}
+                    </h4>
+                    <p class="uk-comment-meta">
+                        {{ comment.created_at|datetime }}
+                    </p>
+                </header>
+                <div class="uk-comment-body">{{ comment.content|safe }}</div>
+                <hr class="uk-article-divider" />
+            </article>
+        </li>
+        {% else %}
+        <p>还没有人评论...</p>
+        {% endfor %}
+    </ul>
+</div>
 
 {% endblock %}

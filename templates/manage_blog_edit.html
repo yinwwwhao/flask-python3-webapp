@@ -1,92 +1,117 @@
-{% extends '__base__.html' %}
-
-{% block title %}{{ title }}博客{% endblock %}
-
-{% block beforehead %}
+{% extends '__base__.html' %} {% block title %}{{ title }}博客{% endblock %} {%
+block beforehead %}
 
 <script>
-var
-    ID = '{{ id }}',
-    action = '{{ action }}',
-    vm;
-function initVM(blog) {
-    vm = new Vue({
-        el: '#vm',
-        data: blog,
-        methods: {
-            submit: function (event) {
-                event.preventDefault();
-                $.post(action, this.$data, function (r) {
-                    return location.assign('/');
-                    // return location.assign('/api/blogs/' + r.id);
-                });
-            }
+    var ID = "{{ id }}",
+        action = "{{ action }}",
+        vm;
+    function initVM(blog) {
+        vm = new Vue({
+            el: "#vm",
+            data: blog,
+            methods: {
+                submit: function (event) {
+                    event.preventDefault();
+                    $.post(action, this.$data, function (r) {
+                        return location.assign("/");
+                        // return location.assign('/api/blogs/' + r.id);
+                    });
+                },
+            },
+        });
+    }
+    $(function () {
+        if (ID) {
+            $.get("/api/blogs/" + ID, function (blog) {
+                blog.id = ID;
+                initVM(blog);
+            });
+        } else {
+            initVM({
+                name: "",
+                summary: "",
+                content: "",
+                tag: "",
+            });
         }
     });
-}
-$(function () {
-    if (ID) {
-
-        $.get('/api/blogs/' + ID, function (blog) {
-            blog.id = ID;
-            initVM(blog);
-        });
-
-    }
-    else {
-        initVM({
-            name: '',
-            summary: '',
-            content: '',
-            tag: ''
-        });
-    }
-});
 </script>
 
-{% endblock %}
+{% endblock %} {% block content %}
 
-{% block content %}
+<div class="uk-width-1-1">
+    <ul class="uk-breadcrumb">
+        <li><a href="/manage/comments">评论</a></li>
+        <li>博客</li>
+        <li><a href="/manage/users">用户</a></li>
+    </ul>
+</div>
 
-    <div class="uk-width-1-1">
-            <ul class="uk-breadcrumb">
-                <li><a href="/manage/comments">评论</a></li>
-                <li>博客</li>
-                <li><a href="/manage/users">用户</a></li>
-            </ul>
-    </div>
-
-    <div id="vm" class="uk-width-1-1">
-        <form v-on:submit="submit" class="uk-form uk-form-stacked">
-            <div class="uk-margin">
-                <label class="uk-form-label" for="name">标题:</label>
-                <div class="uk-form-controls">
-                    <input class="uk-input" id="name" v-model="name" name="name" type="text" placeholder="标题" class="uk-width-1-1">
-                </div>
+<div id="vm" class="uk-width-1-1">
+    <form v-on:submit="submit" class="uk-form uk-form-stacked">
+        <div class="uk-margin">
+            <label class="uk-form-label" for="name">标题:</label>
+            <div class="uk-form-controls">
+                <input
+                    class="uk-input"
+                    id="name"
+                    v-model="name"
+                    name="name"
+                    type="text"
+                    placeholder="标题"
+                    class="uk-width-1-1"
+                />
             </div>
-            <div class="uk-margin">
-                <label class="uk-form-label" for="summary">摘要:</label>
-                <div class="uk-form-controls">
-                    <textarea class="uk-textarea" id="summary" v-model="summary" rows="4" name="summary" placeholder="摘要" class="uk-width-1-1" style="resize:none;"></textarea>
-                </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="summary">摘要:</label>
+            <div class="uk-form-controls">
+                <textarea
+                    class="uk-textarea"
+                    id="summary"
+                    v-model="summary"
+                    rows="4"
+                    name="summary"
+                    placeholder="摘要"
+                    class="uk-width-1-1"
+                    style="resize: none"
+                ></textarea>
             </div>
-            <div class="uk-margin">
-                <label class="uk-form-label" for="text">内容:</label>
-                <div class="uk-form-controls">
-                    <textarea class="uk-textarea" id="text" v-model="content" rows="16" name="content" placeholder="内容" class="uk-width-1-1" style="resize:none;"></textarea>
-                </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="text">内容:</label>
+            <div class="uk-form-controls">
+                <textarea
+                    class="uk-textarea"
+                    id="text"
+                    v-model="content"
+                    rows="16"
+                    name="content"
+                    placeholder="内容"
+                    class="uk-width-1-1"
+                    style="resize: none"
+                ></textarea>
             </div>
-            <div class="'uk-margin">
-                <label class="uk-form-label" for="tag">标签:</label>
-                <div class="uk-form-controls">
-                    <input class="uk-input" id="tag" v-model="tag" name="tag" type="text" placeholder="如：算法" class="uk-width-1-1">
-                </div>
+        </div>
+        <div class="'uk-margin">
+            <label class="uk-form-label" for="tag">标签:</label>
+            <div class="uk-form-controls">
+                <input
+                    class="uk-input"
+                    id="tag"
+                    v-model="tag"
+                    name="tag"
+                    type="text"
+                    placeholder="如：算法"
+                    class="uk-width-1-1"
+                />
             </div>
-            <div class="uk-margin">
-                <button class="uk-button uk-button-primary"> 保存</button>
-                <a href="/manage/blogs" class="uk-button"> 取消</a>
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="uk-margin">
+            <button class="uk-button uk-button-primary">保存</button>
+            <a href="/manage/blogs" class="uk-button"> 取消</a>
+        </div>
+    </form>
+</div>
 
 {% endblock %}

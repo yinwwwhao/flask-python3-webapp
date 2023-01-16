@@ -1,53 +1,46 @@
-{% extends '__base__.html' %}
-
-{% block title %}管理评论{% endblock %}
-
-{% block beforehead %}
+{% extends '__base__.html' %} {% block title %}管理评论{% endblock %} {% block
+beforehead %}
 <script>
-var vm;
-    function initVM(data) {
-        vm = new Vue({
-             el: '#vm',
-            data: {
-                comments: data.comments,
-                page: data.page
-            },
-            methods: {
-                delete_comment: function (comment) {
-                    if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
-                        $.post('/api/comments/' + comment.id + '/delete', function (r) {
-                            location.reload();
-                        });
+    var vm;
+        function initVM(data) {
+            vm = new Vue({
+                 el: '#vm',
+                data: {
+                    comments: data.comments,
+                    page: data.page
+                },
+                methods: {
+                    delete_comment: function (comment) {
+                        if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
+                            $.post('/api/comments/' + comment.id + '/delete', function (r) {
+                                location.reload();
+                            });
+                        }
                     }
                 }
-            }
+            });
+        }
+        $(function() {
+            $.get('/api/comments', {
+                page: {{ page_index }}
+            }, function (r) {
+                initVM(r);
+            });
         });
-    }
-    $(function() {
-        $.get('/api/comments', {
-            page: {{ page_index }}
-        }, function (r) {
-            initVM(r);
-        });
-    });
-    </script>
-{% endblock %}
+</script>
+{% endblock %} {% block content %}
 
-{% block content %}
-
-
-    <div class="uk-width-1-1 uk-margin">
-            <ul class="uk-breadcrumb">
-                <li class="uk-active">评论</li>
-                <li><a href="/manage/blogs">博客</a></li>
-                <li><a href="/manage/users">用户</a></li>
-                <li><a href="/manage/atlas">图册</a></li>
-                <li></li>
-            </ul>
-    </div>
+<div class="uk-width-1-1 uk-margin">
+    <ul class="uk-breadcrumb">
+        <li class="uk-active">评论</li>
+        <li><a href="/manage/blogs">博客</a></li>
+        <li><a href="/manage/users">用户</a></li>
+        <li><a href="/manage/atlas">图册</a></li>
+        <li></li>
+    </ul>
+</div>
 
 <div id="vm" class="uk-width-1-1 uk-margin">
-
     <table class="uk-table uk-table-striped">
         <thead>
             <tr>
@@ -56,39 +49,45 @@ var vm;
                 <th class="uk-width-1-5">创建时间</th>
                 <th class="uk-width-1-10">操作</th>
             </tr>
-            </thead>
+        </thead>
         <tbody>
             <tr v-for="comment in comments">
                 <td>
                     <span v-text="comment.user_name"></span>
                 </td>
                 <td>
-
                     <span v-text="comment.content"></span>
                 </td>
                 <td>
                     <span v-text="comment.created_at[1]"></span>
                 </td>
                 <td>
-                    <a href="#" v-on:click="delete_comment(comment)"><i uk-icon="trash"></i></a>
+                    <a href="#" v-on:click="delete_comment(comment)"
+                        ><i uk-icon="trash"></i
+                    ></a>
                 </td>
             </tr>
         </tbody>
     </table>
     {% if page.item_count != 0 %}
     <ul class="uk-pagination uk-flex-center">
-        <li><a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a></li>
-        {% for i in range(1, page.page_count+1) %}
-        {% if i == 3 %}
-            <li class="uk-disabled"><span>...</span></li>
-        {% elif i > 3 %}
-        {% elif i == page.page_index %}
+        <li>
+            <a href="?page={{ page.page_index-1 }}"
+                ><span uk-pagination-previous></span
+            ></a>
+        </li>
+        {% for i in range(1, page.page_count+1) %} {% if i == 3 %}
+        <li class="uk-disabled"><span>...</span></li>
+        {% elif i > 3 %} {% elif i == page.page_index %}
         <li class="uk-active"><span>{{ i }}</span></li>
         {% else %}
-            <li><a href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %}
-        {% endfor %}
-        <li><a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a></li>
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %} {% endfor %}
+        <li>
+            <a href="?page={{ page.page_index+1 }}"
+                ><span uk-pagination-next></span
+            ></a>
+        </li>
     </ul>
     {% endif %}
 </div>

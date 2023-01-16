@@ -1,34 +1,30 @@
-{% extends '__base__.html' %}
-
-{% block title %}关于{% endblock %}
-
-{% block navbar %}
+{% extends '__base__.html' %} {% block title %}关于{% endblock %} {% block
+navbar %}
 <li><a href="/"> 首页</a></li>
 <li><a href="/atlas/public"> 图册</a></li>
 <li class="uk-active"><a href="/about">关于</a></li>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div id="app" class="uk-margin uk-width-1-1">
     <h1>关于此程序</h1>
-    <p>
-        此程序由尹伟豪开发，任何浏览此网站的人须同意以下条件：
-    </p>
+    <p>此程序由尹伟豪开发，任何浏览此网站的人须同意以下条件：</p>
     <ol>
         <li><h3>Cookie</h3></li>
-        <p>我们将用Cookie来管理使用用户账户（用户登录，注册）功能，如有侵犯，可以随时关闭。</p>
-        <li><h3>隐私</h3></li>
-        <p>我们不会收集您的隐私进行分析（因为作者没有哪个能力）。
+        <p>
+            我们将用Cookie来管理使用用户账户（用户登录，注册）功能，如有侵犯，可以随时关闭。
         </p>
+        <li><h3>隐私</h3></li>
+        <p>我们不会收集您的隐私进行分析（因为作者没有哪个能力）。</p>
     </ol>
     <p>此网站使用Python的Flask框架建造，CSS框架使用Uikit。</p>
-    <p>麻雀虽小，但五脏俱全，这是作者日日夜夜敲代码所造成的成果，来之不易，给作者一份鼓励就是给作者敲代码的动力！</p>
-    <img data-src="/static/images/赞赏码.png" uk-img>
+    <p>
+        麻雀虽小，但五脏俱全，这是作者日日夜夜敲代码所造成的成果，来之不易，给作者一份鼓励就是给作者敲代码的动力！
+    </p>
+    <img data-src="/static/images/赞赏码.png" uk-img />
 </div>
 <div id="author" class="uk-margin uk-width-1-1">
     <h1>关于作者</h1>
     <p>帅帅帅帅帅帅帅帅帅帅帅帅帅帅帅帅帅帅帅</p>
     <p>除了帅以外没法形容，下面一张图片包含了所有：</p>
-    <img data-src="/static/images/author.png" width="500" uk-img>
+    <img data-src="/static/images/author.png" width="500" uk-img />
 </div>
 {% endblock %}
