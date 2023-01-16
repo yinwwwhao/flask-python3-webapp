@@ -96,7 +96,7 @@ def check_admin():
     elif user.admin != True:
         return abort(403)
     else:
-        return 'ok'
+        return ''
 
 
 def get_user():
