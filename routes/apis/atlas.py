@@ -9,6 +9,7 @@ import base64
 import time
 
 logging.info('api/atlas.py started.')
+filepath = os.path.join(*'static/images/atlas/a'.split('/'))[:-1]
 
 @app.route('/api/atlas/delete', methods=['POST'])
 def api_delete_atlas():
@@ -74,12 +75,12 @@ def rename_atlas():
     if not name or not newname:
         raise APIValueError('name')
     
-    t = 'jpg'
-    for x in os.listdir('static/images/atlas'):
-        print('.'.join(x.split('.')[:-1])*10000000)
-        if '.'.join(x.split('.')[:-1]) == newname:
-            t = x.split('.')[-1]
-            os.rename(x, newname + '.' + x.split('.')[-1])
+    t = '.jpg'
+    for imgname in os.listdir('static/images/atlas'):
+        if '.'.join(imgname.split('.')[:-1]) == name:
+            t = imgname.split('.')[-1]
+            logging.info(filepath+name+'.'+t, filepath+newname + '.' + t)
+            os.rename(filepath+name+'.'+t, filepath+newname + '.' + t)
     Atlas.query.filter(Atlas.name == name).update({
         'name': newname,
         'created_at': time.time(),

@@ -3,7 +3,12 @@ navbar %}
 <li><a href="/"> 首页</a></li>
 <li class="uk-active"><a href="/atlas/public"> 图册</a></li>
 <li><a href="/about">关于</a></li>
-{% endblock %} {% block content %}
+{% endblock %} {% block
+    mavbar %}
+    <li><a href="/"> 首页</a></li>
+    <li class="uk-active"><a href="/atlas/public"> 图册</a></li>
+    <li><a href="/about">关于</a></li>
+    {% endblock %}{% block content %}
 <div id="atlas">
     {% for i in image %}
     <img data-src="{{ i.url }}" width="200" uk-img />
@@ -34,7 +39,7 @@ navbar %}
 </ul>
 {% endif %}
 
-<div class="uk-align-center uk-margin">
-    <a href="/atlas/public">切换至公共图册</a>
+<div class="uk-align-center">
+    <a href="/atlas/public" class="uk-button uk-button-primary uk-border-pill">公共图册</a>
 </div>
 {% endblock %}

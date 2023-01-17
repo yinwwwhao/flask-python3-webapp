@@ -3,8 +3,7 @@ block beforehead %}
 
 <script>
     var ID = "{{ id }}",
-        action = "{{ action }}",
-        vm;
+        action = "{{ action }}";
     const { createApp } = Vue;
     function initApp(blog) {
         createApp({
@@ -14,8 +13,8 @@ block beforehead %}
             methods: {
                 submit: function () {
                     $.post(action, this.$data, function (r) {
-                        return location.assign("/");
-                        // return location.assign('/api/blogs/' + r.id);
+                        location.assign("/");
+                        // location.assign('/api/blogs/' + r.id);
                     });
                 },
             },
@@ -41,9 +40,9 @@ block beforehead %}
 {% endblock %} {% block content %}
 
 <div class="uk-width-1-1">
-    <ul class="uk-breadcrumb">
+    <ul class="uk-breadcrumb uk-margin uk-margin-bottom">
         <li><a href="/manage/comments">评论</a></li>
-        <li>博客</li>
+        <li class="uk-active">博客</li>
         <li><a href="/manage/users">用户</a></li>
     </ul>
 </div>

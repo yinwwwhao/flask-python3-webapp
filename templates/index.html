@@ -12,7 +12,7 @@ block navbar %}
         <p class="uk-article-meta">发表于{{ blog.created_at|datetime }}</p>
         <p>{{ blog.summary }}</p>
         <p>
-            <a href="/blogs/{{ blog.id }}"
+            <a href="/blogs/{{ blog.id }}" style="text-decoration: none;"
                 >继续阅读 <i class="uk-icon-link" uk-icon="chevron-right"></i
             ></a>
         </p>
@@ -22,7 +22,7 @@ block navbar %}
     {% else %}
     <h2>暂无内容。。。</h2>
     {% endfor %} {% if blogs %}
-    <ul class="uk-pagination uk-flex-center">
+    <ul class="uk-pagination uk-flex-center uk-margin-medium-bottom">
         {% if tag %}
         <li>
             <a href="?page={{ page.page_index-1 }}&tag={{ tag }}"
@@ -80,7 +80,7 @@ block navbar %}
             </div>
             <div class="uk-card-body">
                 <p>
-                    除了帅以外没法形容，学霸一枚，整天除了学习就是学习（这个网站是怎么回事？）日常爱好吉他，电脑，素描
+                    除了帅以外没法形容，学霸一枚，整天除了学习就是学习（这个网站是怎么回事？）日常爱好吉他，电脑，素描。
                 </p>
             </div>
             <div class="uk-card-footer">
@@ -113,7 +113,7 @@ block navbar %}
                 <tr>
                     <td align="left">
                         <i uk-icon="tag"></i
-                        ><a href="?tag={{ tag.name }}"> {{ tag.name }}</a>
+                        ><a href="?tag={{ tag.name }}" style="text-decoration: none;"> {{ tag.name }}</a>
                     </td>
                     <td align="right">
                         <span class="uk-badge">{{ tag.int }}</span>

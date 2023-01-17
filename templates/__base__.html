@@ -19,76 +19,83 @@
         {% block beforehead %}
         <!-- before head  -->
         {% endblock %}
+        <script>
+            $(function () {
+                $('#mnavlist').append($('#navlist>li').clone());
+            });
+        </script>
     </head>
 
     <body>
         <div
-            uk-sticky="show-on-up: true; animation: uk-animation-slide-top; sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; cls-inactive: uk-navbar-transparent;"
-            class="uk-margin-medium-bottom uk-sticky uk-light"
+            class="uk-nav-container"
+            style="background: linear-gradient(to left, #4bb6f8, #2081e2)"
         >
-            <nav class="uk-background-primary uk-navbar-container" uk-navbar>
-                <div class="uk-navbar-left">
-                    <a href="/" class="uk-navbar-item uk-logo">尹 伟 豪</a>
-                    <ul class="uk-navbar-nav uk-navbar-item uk-visible@m">
-                        {% block navbar %}
-                        <li><a href="/"> 首页</a></li>
-                        <li><a href="/atlas"> 图册</a></li>
-                        <li><a href="/about"> 关于</a></li>
-                        {% endblock %}
-                    </ul>
-                </div>
-                <div class="uk-navbar-right">
-                    <div class="uk-navbar-item">
-                        {% if user %}
-                        <button
-                            onclick="location.href='/users/{{ user.id }}'"
-                            class="uk-button uk-button-text"
-                        >
-                            {{ user.name }}
-                        </button>
-                        &nbsp;&nbsp;
-                        <a href="/users/{{ user.id }}"
-                            ><img
-                                src="{{ user.image }}"
-                                width="50"
-                                height="50"
-                                class="uk-border-circle"
-                        /></a>
-
-                        <a
-                            href="/signout"
-                            class="uk-button uk-button-primary uk-margin-small-left uk-border-pill"
-                        >
-                            登出</a
-                        >
-                        {% else %}
-                        <a href="/signin" class="uk-button uk-button-text">
-                            登录</a
-                        >
-                        <a
-                            href="/register"
-                            class="uk-button uk-button-primary uk-margin-small-left uk-border-pill"
-                        >
-                            注册</a
-                        >
-                        {% endif %}
+            <div class="uk-light uk-container uk-container-expand uk-margin-medium-bottom">
+                <nav class="uk-navbar" uk-navbar>
+                    <div class="uk-navbar-left">
+                        <a href="/" class="uk-navbar-item uk-logo uk-visible@s">尹 伟 豪</a>
+                        <ul class="uk-navbar-item uk-navbar-nav uk-visible@s" id="navlist">
+                            {% block navbar %}
+                            <li><a href="/"> 首页</a></li>
+                            <li><a href="/atlas"> 图册</a></li>
+                            <li><a href="/about"> 关于</a></li>
+                            {% endblock %}
+                        </ul>
+                        <a class="uk-navbar-toggle uk-hidden@s" uk-navbar-toggle-icon href="#"></a>
+                        <div class="uk-navbar-dropdown uk-hidden@s">
+                            <ul class="uk-nav uk-navbar-dropdown-nav" id="mnavlist">
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                    <div class="uk-navbar-right">
+                        <div class="uk-navbar-item">
+                            {% if user %}
+                            <button
+                                onclick="location.href='/users/{{ user.id }}'"
+                                class="uk-button uk-button-text uk-margin-small-right"
+                            >
+                                {{ user.name }}
+                            </button>
+                            <a href="/users/{{ user.id }}"
+                                ><img
+                                    src="{{ user.image }}"
+                                    width="50"
+                                    height="50"
+                                    class="uk-border-circle"
+                            /></a>
+
+                            <a
+                                href="/signout"
+                                class="uk-button uk-button-default uk-margin-small-left uk-border-pill"
+                            >
+                                登出</a
+                            >
+                            {% else %}
+                            <a href="/signin" class="uk-button uk-button-text"> 登录</a>
+                            &nbsp;
+                            <a
+                                href="/register"
+                                class="uk-button uk-button-default uk-margin-small-left uk-border-pill"
+                            >
+                                注册</a
+                            >
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+            </div>
         </div>
 
         <div class="uk-container uk-container-center">
-            <div class="uk-grid">
+            <div uk-grid>
                 <!-- content -->
                 {% block content %} {% endblock %}
                 <!-- // content -->
             </div>
         </div>
 
-        <div
-            class="uk-margin-large-top"
-            style="background-color: #eee; border-top: 1px solid #ccc"
-        >
+        <div class="uk-margin-large-top" style="background-color: #eee; border-top: 1px solid #ccc">
             <div class="uk-container uk-container-center uk-text-center">
                 <div class="uk-panel uk-margin-top uk-margin-bottom">
                     <p>
