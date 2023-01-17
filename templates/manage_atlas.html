@@ -177,21 +177,23 @@
     </table>
 
     {% if image %} {% if page.item_count != 0 %}
-    <ul class="uk-pagination uk-flex-center">
-        <li>
-            <a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a>
-        </li>
-        {% for i in range(1, page.page_count+1) %} {% if i == 3 %}
-        <li class="uk-disabled"><span>...</span></li>
-        {% elif i > 3 %} {% elif i == page.page_index %}
-        <li class="uk-active"><span>{{ i }}</span></li>
-        {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %} {% endfor %}
-        <li>
-            <a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a>
-        </li>
-    </ul>
+    <div class="uk-width-1-1 uk-flex">
+        <ul class="uk-pagination uk-flex-center uk-width-1-1">
+            <li>
+                <a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a>
+            </li>
+            {% for i in range(1, page.page_count+1) %} {% if i == 3 %}
+            <li class="uk-disabled"><span>...</span></li>
+            {% elif i > 3 %} {% elif i == page.page_index %}
+            <li class="uk-active"><span>{{ i }}</span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %} {% endfor %}
+            <li>
+                <a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a>
+            </li>
+        </ul>
+    </div>
     {% endif %} {% endif %}
 </div>
 {% endblock %}

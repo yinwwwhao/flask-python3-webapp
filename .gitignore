@@ -7,3 +7,4 @@ __pycache__/
 *.py[cod]
 run.bat
 app_old.py
+static/images/atlas/

@@ -21,7 +21,7 @@
         {% endblock %}
         <script>
             $(function () {
-                $('#mnavlist').append($('#navlist>li').clone());
+                $("#mnavlist").append($("#navlist>li").clone());
             });
         </script>
     </head>
@@ -44,8 +44,7 @@
                         </ul>
                         <a class="uk-navbar-toggle uk-hidden@s" uk-navbar-toggle-icon href="#"></a>
                         <div class="uk-navbar-dropdown uk-hidden@s">
-                            <ul class="uk-nav uk-navbar-dropdown-nav" id="mnavlist">
-                            </ul>
+                            <ul class="uk-nav uk-navbar-dropdown-nav" id="mnavlist"></ul>
                         </div>
                     </div>
                     <div class="uk-navbar-right">
@@ -94,16 +93,15 @@
                 <!-- // content -->
             </div>
         </div>
-
         <div class="uk-margin-large-top" style="background-color: #eee; border-top: 1px solid #ccc">
             <div class="uk-container uk-container-center uk-text-center">
                 <div class="uk-panel uk-margin-top uk-margin-bottom">
                     <p>
                         Powered by
-                        <a href="https://flask.palletsprojects.com">Flask</a> &
-                        <a href="https://www.getuikit.com">Uikit</a>
+                        <a href="https://flask.palletsprojects.com" style="text-decoration: none">Flask</a> &
+                        <a href="https://www.getuikit.com" style="text-decoration: none">UIkit</a>
                     </p>
-                    <p>尹伟豪 <a href="/manage">管理</a></p>
+                    <p>尹伟豪 <a href="/manage" style="text-decoration: none">管理</a></p>
                 </div>
             </div>
         </div>

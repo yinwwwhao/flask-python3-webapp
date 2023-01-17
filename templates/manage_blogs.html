@@ -1,5 +1,4 @@
-{% extends '__base__.html' %} {% block title %}管理博客{% endblock %} {% block
-beforehead %}
+{% extends '__base__.html' %} {% block title %}管理博客{% endblock %} {% block beforehead %}
 <script>
     const { createApp } = Vue;
     function initApp(data) {
@@ -59,53 +58,39 @@ beforehead %}
         <tbody>
             <tr v-for="blog in blogs">
                 <td>
-                    <a
-                        target="_blank"
-                        :href="'/blogs/'+blog.id"
-                        v-text="blog.name"
-                    ></a>
+                    <a target="_blank" :href="'/blogs/'+blog.id" v-text="blog.name"></a>
                 </td>
                 <td>
-                    <a
-                        target="_blank"
-                        :href="'/users/'+blog.user_id"
-                        v-text="blog.user_name"
-                    ></a>
+                    <a target="_blank" :href="'/users/'+blog.user_id" v-text="blog.user_name"></a>
                 </td>
                 <td>
                     <span v-text="blog.created_at[1]"></span>
                 </td>
                 <td>
-                    <a href="#" @click="edit_blog(blog)"
-                        ><i uk-icon="file-edit"></i
-                    ></a>
-                    <a href="#" @click="delete_blog(blog)"
-                        ><i uk-icon="trash"></i
-                    ></a>
+                    <a href="#" @click="edit_blog(blog)"><i uk-icon="file-edit"></i></a>
+                    <a href="#" @click="delete_blog(blog)"><i uk-icon="trash"></i></a>
                 </td>
             </tr>
         </tbody>
     </table>
     {% if page.item_count != 0 %}
-    <ul class="uk-pagination uk-flex-center">
-        <li>
-            <a href="?page={{ page.page_index-1 }}"
-                ><span uk-pagination-previous></span
-            ></a>
-        </li>
-        {% for i in range(1, page.page_count+1) %} {% if i == 3 %}
-        <li class="uk-disabled"><span>...</span></li>
-        {% elif i > 3 %} {% elif i == page.page_index %}
-        <li class="uk-active"><span>{{ i }}</span></li>
-        {% else %}
-        <li><a href="?page={{ i }}">{{ i }}</a></li>
-        {% endif %} {% endfor %}
-        <li>
-            <a href="?page={{ page.page_index+1 }}"
-                ><span uk-pagination-next></span
-            ></a>
-        </li>
-    </ul>
+    <div class="uk-width-1-1 uk-flex">
+        <ul class="uk-pagination uk-flex-center uk-width-1-1">
+            <li>
+                <a href="?page={{ page.page_index-1 }}"><span uk-pagination-previous></span></a>
+            </li>
+            {% for i in range(1, page.page_count+1) %} {% if i == 3 %}
+            <li class="uk-disabled"><span>...</span></li>
+            {% elif i > 3 %} {% elif i == page.page_index %}
+            <li class="uk-active"><span>{{ i }}</span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %} {% endfor %}
+            <li>
+                <a href="?page={{ page.page_index+1 }}"><span uk-pagination-next></span></a>
+            </li>
+        </ul>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

@@ -24,6 +24,12 @@
             }
             const { createApp } = Vue;
             $(function () {
+                function initError(str) {
+                    $("#error").html(`<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
+                                    <a class="uk-alert-close" uk-close></a>
+                                    <p id="errortext">${str}</p>
+                                </div>`);
+                }
                 createApp({
                     data() {
                         return {
@@ -38,59 +44,29 @@
                         submit: function () {
                             var that = this;
                             if (!this.verification) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>请输入验证码</p>
-                    </div>`;
+                                $;
                                 return;
                             }
 
                             $.post("get_verification", { email: this.email }, function (r) {
                                 if (that.verification != r) {
-                                    document.getElementById(
-                                        "error"
-                                    ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>验证码错误</p>
-                    </div>`;
+                                    initError("验证码错误");
                                     that.register = false;
                                     return;
                                 }
                             });
 
                             if (!this.name.trim()) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>请输入名字</p>
-                    </div>`;
+                                initError("请输入名字");
                                 return;
                             } else if (!validateEmail(this.email.trim().toLowerCase())) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>请输入正确的Email地址</p>
-                    </div>`;
+                                initError("请输入正确的Email地址");
                                 return;
                             } else if (this.password1.length < 6) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>密码长度至少为6个字符</p>
-                    </div>`;
+                                initError("密码长度至少为6个字符");
                                 return;
                             } else if (this.password1 !== this.password2) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>两次输入的密码不一致</p>
-                    </div>`;
+                                initError("两次输入的密码不一致");
                                 return;
                             }
 
@@ -107,12 +83,7 @@
                             });
                             $.ajaxSettings.async = true;
                             if (this.noregister) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>该用户已注册</p>
-                    </div>`;
+                                initError("该用户已注册");
                                 return;
                             }
                             $.post(
@@ -129,12 +100,7 @@
                         },
                         send: async function () {
                             if (!this.email) {
-                                document.getElementById(
-                                    "error"
-                                ).innerHTML = `<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                        <a class="uk-alert-close" uk-close></a>
-                        <p>请输入邮箱</p>
-                    </div>`;
+                                initError("请输入邮箱");
                                 return;
                             }
                             $.post("/send_verification", { email: this.email });
@@ -212,31 +178,35 @@
                                         placeholder="重复密码"
                                     />
                                 </div>
-                                <div class="uk-margin">
-                                    <div class="uk-inline uk-width-2-3" id="verification">
-                                        <input
-                                            v-model="verification"
-                                            class="uk-input"
-                                            type="text"
-                                            placeholder="邮箱验证码"
-                                        />
-                                    </div>
+                            </div>
+                            <div class="uk-margin">
+                                <div class="uk-inline uk-width-2-3" id="verification">
+                                    <input
+                                        v-model="verification"
+                                        class="uk-input"
+                                        type="text"
+                                        placeholder="邮箱验证码"
+                                    />
+                                </div>
                                     <button
-                                        class="uk-button uk-button-primary"
+                                        class="uk-inline uk-width-1-3 uk-button uk-button-primary"
                                         @click.prevent="send"
                                         id="send"
                                     >
                                         发送
                                     </button>
-                                </div>
+                            </div>
+                            <div class="uk-margin">
                                 <button class="uk-button uk-button-primary uk-width-1-1">
                                     注册
                                 </button>
                                 <div id="error"></div>
-                                <p class="uk-margin-medium-top"><a href="/">尹伟豪的官方网站</a></p>
                             </div>
                         </form>
                     </div>
+                    <p class="uk-margin-medium-top">
+                        <a href="/" text-decoration: none>尹伟豪的官方网站</a>
+                    </p>
                 </div>
             </div>
         </div>
