@@ -43,18 +43,7 @@
                     methods: {
                         submit: function () {
                             var that = this;
-                            if (!this.verification) {
-                                $;
-                                return;
-                            }
-
-                            $.post("get_verification", { email: this.email }, function (r) {
-                                if (that.verification != r) {
-                                    initError("验证码错误");
-                                    that.register = false;
-                                    return;
-                                }
-                            });
+                            
 
                             if (!this.name.trim()) {
                                 initError("请输入名字");
@@ -68,7 +57,18 @@
                             } else if (this.password1 !== this.password2) {
                                 initError("两次输入的密码不一致");
                                 return;
+                            } else if (!this.verification) {
+                                initError("请输入验证码")
+                                return;
                             }
+
+                            $.post("get_verification", { email: this.email }, function (r) {
+                                if (that.verification != r) {
+                                    initError("验证码错误");
+                                    that.register = false;
+                                    return;
+                                }
+                            });
 
                             var email = this.email.trim().toLowerCase();
                             var name = this.name.trim();
@@ -197,11 +197,11 @@
                                     </button>
                             </div>
                             <div class="uk-margin">
-                                <button class="uk-button uk-button-primary uk-width-1-1">
+                                <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
                                     注册
                                 </button>
-                                <div id="error"></div>
                             </div>
+                            <div id="error"></div>
                         </form>
                     </div>
                     <p class="uk-margin-medium-top">
