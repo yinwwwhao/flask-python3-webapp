@@ -14,7 +14,7 @@ def manage_comment():
         return check_admin()
     page = request.args.get('page', 1)
     num = db.session.query(sqlfunc.count(Comment.id)).scalar()
-    p = Page(num, page_size=10)
+    p = Page(num, page_size=8)
 
     return render_template('manage_comments.html',
                            page_index=get_page_index(page),

@@ -14,7 +14,7 @@ def manage_user():
         return check_admin()
     page = request.args.get('page', 1)
     num = db.session.query(sqlfunc.count(User.id)).scalar()
-    p = Page(num, page_size=5)
+    p = Page(num, page_size=8)
     return render_template('manage_users.html',
                            page_index=get_page_index(page),
                            page=p,

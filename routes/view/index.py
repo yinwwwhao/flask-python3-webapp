@@ -22,7 +22,7 @@ def index():
         return render_template('index.html', blogs=blogs, user=user, title=request.args.get('tag', None), tags=get_tag(), page=p, tag=request.args.get('tag', None))
     else:
         num = db.session.query(sqlfunc.count(Blog.id)).scalar()
-        p = Page(num, page_size=5, page_index=page)
+        p = Page(num, page_size=8, page_index=page)
         user = get_user()
         blogs = Blog.query.offset(
             p.offset).limit(

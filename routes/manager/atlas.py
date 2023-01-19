@@ -14,7 +14,7 @@ def manage_atlas():
         return check_admin()
     page = int(request.args.get('page', 1))
     num = db.session.query(sqlfunc.count(Atlas.url)).scalar()
-    p = Page(num, page_index=page, page_size=20)
+    p = Page(num, page_index=page, page_size=8)
     image = Atlas.query.offset(
         p.offset).limit(
         p.limit).from_self(
