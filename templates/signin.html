@@ -14,74 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.prod.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.min.js"></script>
-        <script>
-            function validateEmail(email) {
-                var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
-                return re.test(email.toLowerCase());
-            }
-            const { createApp } = Vue;
-            $(function () {
-                function initError(str) {
-                    $("#error").html(`<div class="uk-alert-danger uk-animation-slide-top" uk-alert>
-                                    <a class="uk-alert-close" uk-close></a>
-                                    <p id="errortext">${str}</p>
-                                </div>`);
-                }
-                createApp({
-                    data() {
-                        return {
-                            email: "",
-                            passwd: "",
-                        };
-                    },
-                    methods: {
-                        submit: function () {
-                            if (!this.email) {
-                                initError("请输入邮箱");
-                                return;
-                            } else if (!this.passwd) {
-                                initError("请输入密码");
-                                return;
-                            } else if (this.passwd.length < 6) {
-                                initError("密码长度至少为6个字符");
-                                return;
-                            } else if (!validateEmail(this.email.trim().toLowerCase())) {
-                                initError("请输入正确的Email地址");
-                                return;
-                            }
-
-                            var email = this.email.trim().toLowerCase();
-                            var that = this;
-                            $.ajaxSettings.async = false;
-                            $.getJSON("/api/users", function (r) {
-                                for (let x in r.users) {
-                                    if (email.trim().toLowerCase() === r.users[x].email) {
-                                        that.signin = true;
-                                        break;
-                                    }
-                                }
-                            });
-                            $.ajaxSettings.async = true;
-                            if (!this.signin) {
-                                initError("暂无该用户");
-                                return;
-                            }
-
-                            $.post(
-                                "api/authenticate",
-                                {
-                                    email: email,
-                                    passwd: this.passwd,
-                                },
-                                function (r) {
-                                    location.assign("/");
-                                }
-                            );
-                        },
-                    },
-                }).mount("#app");
-            });
-        </script>
+        <script src="/static/js/signin.js"></script>
     </head>
 
     <body class="uk-background-muted">
@@ -119,7 +52,10 @@
                                 </div>
                             </div>
                             <div class="uk-margin">
-                                <button type="submit" class="uk-button uk-button-primary uk-width-1-1">
+                                <button
+                                    type="submit"
+                                    class="uk-button uk-button-primary uk-width-1-1"
+                                >
                                     登录
                                 </button>
                             </div>

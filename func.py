@@ -31,18 +31,15 @@ def send_email(verification, email):
     def _format_addr(s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
-
     
     to_addr = email
     
-
     msg = MIMEText(f'您的邮箱验证码为：\n{verification}', 'plain', 'utf-8')
     msg['From'] = _format_addr('尹伟豪 <%s>' % from_addr)
     msg['To'] = _format_addr('尊敬的用户 <%s>' % to_addr)
     msg['Subject'] = Header('邮箱验证码', 'utf-8').encode()
 
     server = smtplib.SMTP(smtp_server, 25)
-    server.set_debuglevel(1)
     server.login(from_addr, password)
     server.sendmail(from_addr, [to_addr], msg.as_string())
     server.quit()
@@ -100,29 +97,16 @@ def check_admin():
 
 
 def get_user():
-    try:
-        cookie_str = request.cookies[COOKIE_NAME]
-        user = cookie2user(cookie_str)
-        if user:
-            u = user.to_dict()
-            u.passwd = '******'
-            return u
-        else:
-            return None
-    except BaseException:
+    cookie_str = request.cookies.get(COOKIE_NAME, '')
+    user = cookie2user(cookie_str)
+    if user:
+        u = user.to_dict()
+        u.passwd = '******'
+        return u
+    else:
         return None
 
 
-def bubbleSort(arr):
-    n = len(arr)
-
-    for i in range(n):
-
-        for j in range(0, n - i - 1):
-            if arr[j]['int'] < arr[j + 1]['int']:
-                arr[j], arr[j + 1] = arr[j + 1], arr[j]
-
-    return arr
 
 
 def get_tag():
@@ -135,7 +119,7 @@ def get_tag():
             continue
         tags.append({'int': t.count(tag), 'name': tag})
 
-    return bubbleSort(tags)
+    return sorted(tags, key=lambda x:x.get('int'), reverse=True)
 
 
 def text2html(text):
