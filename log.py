@@ -1,11 +1,5 @@
 import logging
-from sql_configs import mode
 
-
-if mode == 'dev':
-    level = logging.INFO
-else:
-    level = logging.ERROR
 
 logger = logging.getLogger()
 
@@ -16,8 +10,8 @@ LOG_FILE = "run_log.log"
 logging.basicConfig(filename=LOG_FILE,
                     filemode="a",
                     format=log_format,
-                    level=level,
+                    level=logging.INFO,
                     encoding='utf-8')
 
 
-logging.info("begin service")
+logging.info("begin log service")

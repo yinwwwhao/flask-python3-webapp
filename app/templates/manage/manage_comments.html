@@ -1,0 +1,70 @@
+{% extends '__base__.html' %} {% block title %}管理评论{% endblock %} {% block beforehead %}
+<script>
+    const { createApp } = Vue;
+    function initApp(data) {
+        createApp({
+            data() {
+                return {
+                    comments: data.comments,
+                    page: data.page
+                }
+            },
+            methods: {
+                delete_comment: function (comment) {
+                    if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
+                        $.post('/api/comments/' + comment.id + '/delete', function (r) {
+                            location.reload();
+                        });
+                    }
+                }
+            }
+        }).mount('#app');
+    }
+    $(function () {
+        $.get('/api/comments', {
+            page: '{{ page }}'
+            }, function (r) {
+            initApp(r);
+        });
+        });
+</script>
+{% endblock %} {% block content %}
+
+<div class="uk-width-1-1 uk-margin">
+    <ul class="uk-breadcrumb">
+        <li class="uk-active">评论</li>
+        <li><a href="/manage/blogs">博客</a></li>
+        <li><a href="/manage/users">用户</a></li>
+        <li><a href="/manage/atlas">图册</a></li>
+    </ul>
+</div>
+
+<div id="app" class="uk-width-1-1 uk-margin">
+    <table class="uk-table uk-table-striped">
+        <thead>
+            <tr>
+                <th class="uk-width-1-5">作者</th>
+                <th class="uk-width-1-2">内容</th>
+                <th class="uk-width-1-5">创建时间</th>
+                <th class="uk-width-1-10">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="comment in comments">
+                <td>
+                    <span v-text="comment.user_name"></span>
+                </td>
+                <td>
+                    <span v-text="comment.content"></span>
+                </td>
+                <td>
+                    <span v-text="comment.created_at[1]"></span>
+                </td>
+                <td>
+                    <a href="#" @click="delete_comment(comment)"><i uk-icon="trash"></i></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

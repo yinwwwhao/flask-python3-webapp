@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        {% block meta %}
+        <!-- block meta -->
+        {% endblock %}
+        <title>{% block title %} ? {% endblock %} - 尹伟豪的官方网站</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="shortcut icon" href="/static/favicon.ico" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/css/uikit.min.css"
+        />
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.prod.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        {% block beforehead %}
+        <!-- before head  -->
+        {% endblock %}
+        <script>
+            $(function () {
+                $("#mnavlist").append($("#navlist>li").clone());
+            });
+        </script>
+    </head>
+
+    <body>
+        <div
+            class="uk-nav-container"
+            style="background: linear-gradient(to left, #4bb6f8, #2081e2)"
+        >
+            <div class="uk-light uk-container uk-container-expand uk-margin-medium-bottom">
+                <nav class="uk-navbar" uk-navbar>
+                    <div class="uk-navbar-left">
+                        <a href="/" class="uk-navbar-item uk-logo uk-visible@s">尹 伟 豪</a>
+                        <ul class="uk-navbar-item uk-navbar-nav uk-visible@s" id="navlist">
+                            {% block navbar %}
+                            <li><a href="/"> 首页</a></li>
+                            <li><a href="/atlas"> 图册</a></li>
+                            <li><a href="/about"> 关于</a></li>
+                            {% endblock %}
+                        </ul>
+                        <a class="uk-navbar-toggle uk-hidden@s" uk-navbar-toggle-icon href="#"></a>
+                        <div class="uk-navbar-dropdown uk-hidden@s">
+                            <ul class="uk-nav uk-navbar-dropdown-nav" id="mnavlist"></ul>
+                        </div>
+                    </div>
+                    <div class="uk-navbar-right">
+                        <div class="uk-navbar-item">
+                            {% if user %}
+                            <button
+                                onclick="location.href='/users/{{ user.id }}'"
+                                class="uk-button uk-button-text uk-margin-small-right"
+                            >
+                                {{ user.name }}
+                            </button>
+                            <a href="/users/{{ user.id }}"
+                                ><img
+                                    src="{{ user.image }}"
+                                    width="50"
+                                    height="50"
+                                    class="uk-border-circle"
+                            /></a>
+
+                            <a
+                                href="/signout"
+                                class="uk-button uk-button-default uk-margin-small-left uk-border-pill"
+                            >
+                                登出</a
+                            >
+                            {% else %}
+                            <a href="/signin" class="uk-button uk-button-text"> 登录</a>
+                            &nbsp;
+                            <a
+                                href="/register"
+                                class="uk-button uk-button-default uk-margin-small-left uk-border-pill"
+                            >
+                                注册</a
+                            >
+                            {% endif %}
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="uk-container uk-container-center">
+            <div uk-grid>
+                <!-- content -->
+                {% block content %} {% endblock %}
+                <!-- // content -->
+            </div>
+        </div>
+        <div class="uk-margin-large-top" style="background-color: #eee; border-top: 1px solid #ccc">
+            <div class="uk-container uk-container-center uk-text-center">
+                <div class="uk-panel uk-margin-top uk-margin-bottom">
+                    <p>
+                        Powered by
+                        <a href="https://flask.palletsprojects.com" style="text-decoration: none">Flask</a> &
+                        <a href="https://www.getuikit.com" style="text-decoration: none">UIkit</a>
+                    </p>
+                    <p>尹伟豪 <a href="/manage" style="text-decoration: none">管理</a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

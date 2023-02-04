@@ -3,11 +3,11 @@ from email.header import Header
 from email.mime.text import MIMEText
 from email.utils import parseaddr, formataddr
 from flask import request, redirect, abort
-from models import User, Blog
+from app.models import User
 import smtplib
 import time
 import hashlib
-from configs import smtp_server, from_addr, password
+#from configs import smtp_server, from_addr, password
 
 
 COOKIE_NAME = 'awesession'
@@ -45,15 +45,6 @@ def send_email(verification, email):
     server.quit()
 
 
-def get_page_index(page_str):
-    p = 1
-    try:
-        p = int(page_str)
-    except BaseException:
-        pass
-    if p < 1:
-        p = 1
-    return p
 
 
 def user2cookie(user):
@@ -109,20 +100,3 @@ def get_user():
 
 
 
-def get_tag():
-    t = []
-    for blog in Blog.query.all():
-        t.append(blog.tag)
-    tags = []
-    for tag in t:
-        if {'int': t.count(tag), 'name': tag} in tags:
-            continue
-        tags.append({'int': t.count(tag), 'name': tag})
-
-    return sorted(tags, key=lambda x:x.get('int'), reverse=True)
-
-
-def text2html(text):
-    lines = map(lambda s: '%s' % s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'),
-                filter(lambda s: s.strip() != '', text.split('\n')))
-    return ''.join(lines)
