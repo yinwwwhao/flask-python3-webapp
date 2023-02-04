@@ -1,10 +1,7 @@
-*.log
-configs.py
 env/
-.vscode/
-*/__pycache__/
-__pycache__/
 *.py[cod]
-run.bat
-app_old.py
-static/images/atlas/
+__pycache__/
+
+*.log
+
+.vscode/
