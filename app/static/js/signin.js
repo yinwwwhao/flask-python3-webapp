@@ -65,8 +65,15 @@ $(function () {
                         email: email,
                         passwd: this.passwd,
                     },
-                    function () {
+                    function (r) {
+                        if (!r) {
                         location.assign("/");
+                        } else {
+                            UIkit.notification({
+                                'message': '密码错误。',
+                                'status': 'danger'
+                            });
+                        }
                     }
                 );
             },
