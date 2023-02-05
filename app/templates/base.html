@@ -39,6 +39,7 @@
                             {% block navbar %}
                             <li><a href="/"> 首页</a></li>
                             <li><a href="/atlas"> 图册</a></li>
+                            <li><a href="/me"> 我的</a></li>
                             <li><a href="/about"> 关于</a></li>
                             {% endblock %}
                         </ul>
@@ -51,12 +52,12 @@
                         <div class="uk-navbar-item">
                             {% if user %}
                             <button
-                                onclick="location.href='/users/{{ user.id }}'"
+                                onclick="location.href='/me'"
                                 class="uk-button uk-button-text uk-margin-small-right"
                             >
                                 {{ user.name }}
                             </button>
-                            <a href="/users/{{ user.id }}"
+                            <a href="/me"
                                 ><img
                                     src="{{ user.image }}"
                                     width="50"
@@ -101,7 +102,9 @@
                         <a href="https://flask.palletsprojects.com" style="text-decoration: none">Flask</a> &
                         <a href="https://www.getuikit.com" style="text-decoration: none">UIkit</a>
                     </p>
-                    <p>尹伟豪 <a href="/manage" style="text-decoration: none">管理</a></p>
+                    <p>yinwwwhao
+                    {% if user.admin %}&nbsp;<a href="/manage" style="text-decoration: none">管理</a>{% endif %}
+                </p>
                 </div>
             </div>
         </div>

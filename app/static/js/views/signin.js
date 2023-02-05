@@ -67,7 +67,7 @@ $(function () {
                     },
                     function (r) {
                         if (!r) {
-                        location.assign("/");
+                            location.assign("/");
                         } else {
                             UIkit.notification({
                                 'message': '密码错误。',

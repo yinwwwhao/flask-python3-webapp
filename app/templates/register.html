@@ -14,7 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/vue@3.2.45/dist/vue.global.prod.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.0.0/crypto-js.min.js"></script>
-        <script src="/static/js/register.js"></script>
+        <script src="/static/js/views/register.js"></script>
     </head>
 
     <body class="uk-background-muted">
@@ -80,7 +80,7 @@
                                         v-model="verification"
                                         class="uk-width-2-3 uk-input"
                                         type="text"
-                                        placeholder="邮箱验证码"
+                                        :placeholder="tips"
                                     />
 
                                     <button
@@ -101,7 +101,6 @@
                                     注册
                                 </button>
                             </div>
-                            <div id="error"></div>
                         </form>
                     </div>
                     <p class="uk-margin-medium-top">

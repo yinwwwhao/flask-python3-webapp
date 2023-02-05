@@ -1,4 +1,4 @@
-{% extends '__base__.html' %} {% block title %}{{ blog.name }}{% endblock %} {%
+{% extends 'base.html' %} {% block title %}{{ blog.name }}{% endblock %} {%
 block beforehead %}
 <script>
     var comment_url = "/api/blogs/{{ blog.id }}/comments";

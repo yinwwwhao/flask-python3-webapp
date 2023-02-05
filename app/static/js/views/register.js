@@ -22,23 +22,20 @@ async function run_ver(app) {
         return;
     }
     var $send = $("#send");
-    var $input = $("#ver_input");
-    $input.addClass("uk-width-1-1"
-    ).removeClass("uk-width-2-3"
-    ).attr("disabled", "disabled");
+    var $input = $("#ver_input")
     $send.addClass("uk-hidden");
+    $input.toggleClass("uk-width-2-3", "uk-width-1-1")
 
     for (let t = Number(getCookie("ver_time")) / 1000; t != 0; t--) {
-        app.verification = `${t}秒后重发`;
+        app.tips = `${t}秒后重发`;
         setCookie("ver_time", t * 1000);
         await sleep(1000);
     }
-    app.verification = '';
+    
+    app.tips = '邮箱验证码';
     setCookie("ver_time", "");
 
-    $input.removeClass("uk-width-1-1"
-    ).addClass("uk-width-2-3"
-    ).removeAttr("disabled");
+    $input.toggleClass("uk-width-1-1", "uk-width-2-3")
     $send.removeClass("uk-hidden");
 }
 
@@ -52,6 +49,7 @@ $(function () {
                 password1: "",
                 password2: "",
                 verification: "",
+                tips:"邮箱验证码"
             };
         },
         mounted() {
@@ -59,7 +57,6 @@ $(function () {
         },
         methods: {
             submit: function () {
-                var that = this;
 
                 if (!this.name.trim()) {
                     UIkit.notification({
@@ -98,45 +95,40 @@ $(function () {
                     return;
                 }
 
-                $.post("get_verification", { email: this.email }, function (r) {
-                    if (that.verification != r) {
-                        UIkit.notification({
-                            message: "验证码错误。",
-                            status: "danger",
-                        });
-                        that.register = false;
-                        return;
-                    }
-                });
-
                 var email = this.email.trim().toLowerCase();
                 var name = this.name.trim();
-                $.ajaxSettings.async = false;
-                $.getJSON("/api/users", function (r) {
-                    for (let x in r.users) {
-                        if (that.email.trim().toLowerCase() === r.users[x].email) {
-                            that.noregister = true;
-                            break;
-                        }
-                    }
-                });
-                $.ajaxSettings.async = true;
-                if (this.noregister) {
-                    UIkit.notification({
-                        message: "该用户已注册。",
-                        status: "danger",
-                    });
-                    return;
-                }
+                var code = this.verification.trim();
+
                 $.post(
                     "/api/users",
                     {
                         name: name,
                         email: email,
                         passwd: CryptoJS.SHA1(email + ":" + this.password1).toString(),
+                        code: code
                     },
                     function (r) {
-                        location.assign("/");
+                        if (r) {
+                            if (r.message.error.text === 'code') {
+                            UIkit.notification({
+                                message: "验证码错误。",
+                                status: "danger"
+                            });
+                        } else if (r.message.error.text === 'Email is already in use.') {
+                            UIkit.notification({
+                                message: "该用户已注册。",
+                                status: "danger"
+                            });
+                        } else {
+                            UIkit.notification({
+                                message: r.message.error.type+r.message.error.text,
+                                status: "danger"
+                            });
+                        }
+                            return;
+                        } else {
+                            location.assign("/");
+                    }
                     }
                 );
             },
@@ -155,7 +147,7 @@ $(function () {
                     });
                     return;
                 }
-                $.post("/send_verification", { email: this.email });
+                $.post("/api/send_verification", { email: this.email });
                 setCookie("ver_time", 60000);
                 await run_ver(this);
             },
