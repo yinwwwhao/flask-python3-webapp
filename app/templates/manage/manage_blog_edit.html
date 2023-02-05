@@ -1,49 +1,16 @@
-{% extends '__base__.html' %} {% block title %}{{ title }}博客{% endblock %} {%
+{% extends 'base.html' %} {% block title %}{{ title }}博客{% endblock %} {%
 block beforehead %}
 
-<script>
-    var ID = "{{ id }}",
-        action = "{{ action }}";
-    const { createApp } = Vue;
-    function initApp(blog) {
-        createApp({
-            data() {
-                return blog;
-            },
-            methods: {
-                submit: function () {
-                    $.post(action, this.$data, function (r) {
-                        location.assign("/");
-                        // location.assign('/api/blogs/' + r.id);
-                    });
-                },
-            },
-        }).mount("#app");
-    }
-    $(function () {
-        if (ID) {
-            $.get("/api/blogs/" + ID, function (blog) {
-                blog.id = ID;
-                initApp(blog);
-            });
-        } else {
-            initApp({
-                name: "",
-                summary: "",
-                content: "",
-                tag: "",
-            });
-        }
-    });
-</script>
+<script src="/static/js/manage/blog_edit.js"></script>
 
 {% endblock %} {% block content %}
 
 <div class="uk-width-1-1">
-    <ul class="uk-breadcrumb uk-margin uk-margin-bottom">
+    <ul class="uk-breadcrumb">
         <li><a href="/manage/comments">评论</a></li>
         <li class="uk-active">博客</li>
         <li><a href="/manage/users">用户</a></li>
+        <li><a href="/manage/atlas">图册</a></li>
     </ul>
 </div>
 
@@ -93,7 +60,7 @@ block beforehead %}
                 ></textarea>
             </div>
         </div>
-        <div class="'uk-margin">
+        <div class="uk-margin">
             <label class="uk-form-label" for="tag">标签:</label>
             <div class="uk-form-controls">
                 <input

@@ -1,33 +1,5 @@
-{% extends '__base__.html' %} {% block title %}管理评论{% endblock %} {% block beforehead %}
-<script>
-    const { createApp } = Vue;
-    function initApp(data) {
-        createApp({
-            data() {
-                return {
-                    comments: data.comments,
-                    page: data.page
-                }
-            },
-            methods: {
-                delete_comment: function (comment) {
-                    if (confirm('确认要删除评论“' + comment.content + '”？删除后不可恢复！')) {
-                        $.post('/api/comments/' + comment.id + '/delete', function (r) {
-                            location.reload();
-                        });
-                    }
-                }
-            }
-        }).mount('#app');
-    }
-    $(function () {
-        $.get('/api/comments', {
-            page: '{{ page }}'
-            }, function (r) {
-            initApp(r);
-        });
-        });
-</script>
+{% extends 'base.html' %} {% block title %}管理评论{% endblock %} {% block beforehead %}
+<script src="/static/js/manage/comments.js"></script>
 {% endblock %} {% block content %}
 
 <div class="uk-width-1-1 uk-margin">
@@ -66,5 +38,18 @@
             </tr>
         </tbody>
     </table>
+</div>
+<div class="uk-flex uk-width-1-1" id="page">
+    <ul class="uk-pagination uk-flex-center uk-margin-medium-bottom uk-width-1-1">
+        <li v-if="page.has_prev">
+            <a :href="'?page='+page.prev_num"><span uk-pagination-previous></span></a>
+        </li>
+        <li v-if="page.has_prev"><a :href="'?page='+page.prev_num" v-text="page.prev_num"></a></li>
+        <li v-if="page.has_prev || page.has_next" class="uk-active"><span v-text="page.page"></span></li>
+        <li v-if="page.has_next"><a :href="'?page='+page.next_num" v-text="page.next_num"></a></li>
+        <li v-if="page.has_next">
+            <a :href="'?page='+page.next_num"><span uk-pagination-next></span></a>
+        </li>
+    </ul>
 </div>
 {% endblock %}

@@ -1,114 +1,5 @@
-{% extends '__base__.html' %} {% block title %}管理图册{% endblock %} {% block beforehead %}
-<script>
-    $(function () {
-        const { createApp } = Vue;
-        createApp({
-            data() {
-                return {
-                    name: "",
-                    private: false,
-                };
-            },
-            methods: {
-                submit: function () {
-                    if (!this.name) {
-                        UIkit.notification({
-                            message: "请输入名称！",
-                            status: "danger",
-                        });
-                        return;
-                    }
-                    if (!document.getElementById("upload").files[0]) {
-                        UIkit.notification({
-                            message: "请上传文件！",
-                            status: "danger",
-                        });
-                        return;
-                    }
-                    var file = document.getElementById("upload").files[0];
-                    if (file.type.substring(0, 5) != "image") {
-                        UIkit.notification({
-                            message: "请上传图片！",
-                            status: "danger",
-                        });
-                        return;
-                    }
-                    var reader = new FileReader();
-
-                    var that = this;
-                    reader.onload = function (e) {
-                        var urlData = e.target.result.split(",")[1];
-
-                        $.post(
-                            "/api/atlas/create",
-                            {
-                                data: urlData,
-                                name: that.name,
-                                filetype: file.name.split(".")[file.name.split(".").length - 1],
-                                private: that.private,
-                            },
-                            function (r) {
-                                location.reload();
-                            }
-                        );
-                    };
-                    reader.readAsDataURL(file);
-                },
-                loadimg: function () {
-                    var reader = new FileReader();
-                    var file = document.getElementById("upload").files[0];
-                    var that = this;
-                    reader.onload = function (e) {
-                        var urlData = e.target.result;
-                        document.getElementById(
-                            "result"
-                        ).innerHTML = `<img data-src="${urlData}" width="300" uk-img>`;
-                    };
-                    reader.readAsDataURL(file);
-                },
-            },
-        }).mount("#upload-file");
-        function initApp(data) {
-            createApp({
-                data() {
-                    return {
-                        images: data.atlas,
-                        page: data.page
-                    };
-                },
-                methods: {
-                    delete_image: function (i) {
-                        if (confirm("确认要删除“" + i.name + "”？删除后不可恢复！")) {
-                            $.post("/api/atlas/delete", { url: i.url }, function () {
-                                location.reload();
-                            });
-                        }
-                    },
-                    re_private: function (name, boolean) {
-                        $.post("/api/atlas/private", { name: name, private: boolean }, function (r) {
-                            location.reload();
-                        });
-                    },
-                    rename: function (name) {
-                        var newname = prompt("请输入新的名称：");
-                        if (name === newname) {
-                            var newname = prompt("名称与当前名称相同，请重新输入：");
-                        }
-                        $.post("/api/atlas/rename", { name: name, newname: newname }, function (r) {
-                            location.reload();
-                        });
-                    },
-                },
-            }).mount("#app");
-        }
-        $.get('/api/atlas', {
-            page: '{{ page }}'
-        }, function (r) {
-            console.log(r)
-            initApp(r);
-        });
-    });
-</script>
+{% extends 'base.html' %} {% block title %}管理图册{% endblock %} {% block beforehead %}
+<script src="/static/js/manage/atlas.js"></script>
 {% endblock %} {% block content %}
 
 <div class="uk-width-1-1 uk-margin">
@@ -132,9 +23,6 @@
     </div>
     <form>
         <div class="uk-margin">
-            <div class="uk-inline">
-                <input v-model="name" type="text" placeholder="设置名称" class="uk-input" />
-            </div>
             <button class="uk-button uk-button-default" type="button" @click.prevent="submit">
                 提交
             </button>
@@ -149,19 +37,13 @@
     <table class="uk-table uk-table-striped">
         <thead>
             <tr>
-                <th class="uk-width-1-5">名称</th>
-                <th class="uk-width-1-2">图片</th>
-                <th class="uk-width-1-5">创建时间</th>
-                <th class="uk-width-1-10">操作</th>
+                <th class="uk-width-2-5">图片</th>
+                <th class="uk-width-2-5">创建时间</th>
+                <th class="uk-width-1-5">操作</th>
             </tr>
         </thead>
         <tbody>
                 <tr v-for="i in images">
-                    <td>
-                        <a target="_blank" href="" v-text="i.name">
-                            <a @click="rename(i.name)"><i uk-icon="file-edit"></i></a>
-                        </a>
-                    </td>
                     <td>
                         <img :data-src="i.url" width="50" uk-img />
                     </td>
@@ -170,6 +52,7 @@
                     </td>
                     <td>
                         <a href="#" @click="delete_image(i)"><i uk-icon="trash"></i></a>
+                        &nbsp;
                         <span v-if="i.private">
                             <a href="#" @click="re_private(i.name, false)">更为共有</a>
                         </span>
@@ -180,5 +63,18 @@
                 </tr>
         </tbody>
     </table>
+</div>
+<div class="uk-flex uk-width-1-1" id="page">
+    <ul class="uk-pagination uk-flex-center uk-margin-medium-bottom uk-width-1-1">
+        <li v-if="page.has_prev">
+            <a :href="'?page='+page.prev_num"><span uk-pagination-previous></span></a>
+        </li>
+        <li v-if="page.has_prev"><a :href="'?page='+page.prev_num" v-text="page.prev_num"></a></li>
+        <li v-if="page.has_prev || page.has_next" class="uk-active"><span v-text="page.page"></span></li>
+        <li v-if="page.has_next"><a :href="'?page='+page.next_num" v-text="page.next_num"></a></li>
+        <li v-if="page.has_next">
+            <a :href="'?page='+page.next_num"><span uk-pagination-next></span></a>
+        </li>
+    </ul>
 </div>
 {% endblock %}
