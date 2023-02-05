@@ -10,7 +10,7 @@ logging.info('view/atlas started.')
 def atlas():
     page = int(request.args.get('page', 1))
     user = get_user()
-    p = Atlas.query.order_by(Atlas.created_at.desc()).filter(Atlas.private == False).paginate(page=page, per_page=10)
+    p = Atlas.query.order_by(Atlas.created_at.desc()).filter(Atlas.private == False).paginate(page=page, per_page=12)
     image = p.items
     return render_template('atlas.html', user=user, image=image, page=p)
 
@@ -31,6 +31,6 @@ def atlas_private():
         pass
     page = int(request.args.get('page', 1))
     user = get_user()
-    p = Atlas.query.order_by(Atlas.created_at.desc()).filter(Atlas.private == True).paginate(page=page, per_page=10)
+    p = Atlas.query.order_by(Atlas.created_at.desc()).filter(Atlas.private == True).paginate(page=page, per_page=12)
     image = p.items
     return render_template('atlas_private.html', user=user, image=image, page=p)

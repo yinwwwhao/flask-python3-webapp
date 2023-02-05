@@ -1,9 +1,9 @@
-create database awesome default charset=utf8mb4;
+create database webapp default charset=utf8mb4;
 
-use awesome;
+use webapp;
 
-create user 'www-data'@'%' identified by 'www-data';
-grant all on awesome.* to 'www-data'@'%';
+create user 'www-data'@'localhost' identified by 'www-data';
+grant all on webapp.* to 'www-data'@'localhost';
 
 create table users (
     `id` varchar(50) not null,
@@ -41,9 +41,10 @@ create table comments (
 ) engine=innodb default charset=utf8mb4;
 
 create table atlas (
-    `name` varchar(50) not null,
+    `id` varchar(50) not null,
+    `image_type` varchar(20) not null,
     `created_at` real not null,
     `url` varchar(50) not null,
     `private` boolean not null,
-    primary key (`name`)
+    primary key (`id`)
 ) engine=innodb default charset=utf8mb4;

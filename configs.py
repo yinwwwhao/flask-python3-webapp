@@ -1,6 +1,9 @@
+from datetime import timedelta
+
+
 HOST = 'localhost'
 PORT = '3306'
-DATABASE = 'awesome'
+DATABASE = 'webapp'
 USERNAME = 'www-data'
 PASSWORD = 'www-data'
 
@@ -9,3 +12,4 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{host}:{
 
 SECRET_KEY = 'aF1!fB2}cC'
 
+PERMANENT_SESSION_LIFETIME = timedelta(days=1)

@@ -1,11 +1,13 @@
+import random
 from app.apis import apis_blueprint as app
-from app.apis._message import APIValueError, APIError
-from func import datetime_filter, COOKIE_NAME, user2cookie
-from flask import request, make_response, session, redirect
+from app.apis._message import APIValueError, APIError, Message
+from func import datetime_filter, COOKIE_NAME, send_email, user2cookie
+from flask import request, make_response, session
 from app.models import User, db, next_id
 from log import logging
 import hashlib
 import re
+import time
 
 
 logging.info('api/user.py started.')
@@ -14,26 +16,33 @@ logging.info('api/user.py started.')
 _RE_EMAIL = re.compile(
     r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_SHA1 = re.compile(r'^[0-9a-f]{40}$')
+_RE_CODE = re.compile(r'^\d{6}$')
 
 @app.route('/api/users', methods=['get', 'post'])
 def user():
     if request.method == 'POST':
 
-        email = request.form['email']
-        name = request.form['name']
-        passwd = request.form['passwd']
-
+        email = request.form.get('email')
+        name = request.form.get('name')
+        passwd = request.form.get('passwd')
+        code = request.form.get('code')
+        code2 = session.get(email)
         if not name or not name.strip():
             return APIValueError('name')
         if not email or not _RE_EMAIL.match(email):
             return APIValueError('email')
         if not passwd or not _RE_SHA1.match(passwd):
             return APIValueError('passwd')
+        if not code or not _RE_CODE.match(code) or not code2:
+            return APIValueError('code')
+        if code != code2.split(';')[0]:
+            return APIValueError('code')
         users = User.query.filter(User.email == email).all()
         if len(users) > 0:
             return APIError(
                 'register:failed',
                 'Email is already in use.')
+
         uid = next_id()
         new_user = User(id=uid, name=name.strip(), email=email,
                         passwd=passwd,
@@ -42,9 +51,8 @@ def user():
         db.session.add(new_user)
         db.session.commit()
 
-        del session[request.form.get('email')]
-        # make session cookie:
-        r = redirect('/')
+
+        r = make_response()
         r.set_cookie(COOKIE_NAME, user2cookie(
             new_user), httponly=True)
         return r
@@ -72,8 +80,8 @@ def user():
 
 @app.route('/api/authenticate', methods=['post'])
 def authenticate():
-    email = request.form['email']
-    passwd = request.form['passwd']
+    email = request.form.get('email')
+    passwd = request.form.get('passwd')
     if not email:
         return APIValueError('Invalid email.')
     if not passwd:
@@ -99,3 +107,19 @@ def authenticate():
         httponly=True)
 
     return r
+
+
+@app.route('/api/send_verification', methods=['post'])
+def send_verification():
+    email = request.form.get('email')
+    if not email:
+        return APIValueError('Invalid email.')
+    text = session.get(email)
+    if text:
+        if time.time() < float(text.split(';')[1]):
+            return APIError('invalid:send', 'Not timeout.')
+    verification = str(random.randint(100000, 999999))
+    session[email] = verification+';'+str(time.time()+300)
+    session.permanent = True
+    send_email(verification, email)
+    return Message('send ok')

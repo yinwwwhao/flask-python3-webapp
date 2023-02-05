@@ -89,7 +89,8 @@ class Comment(db.Model):
 class Atlas(db.Model):
     __tablename__ = 'atlas'
     # 创建atlas model
-    name = db.Column(db.String(50))
-    url = db.Column(db.String(50), primary_key=True)
+    id = db.Column(db.String(50), primary_key=True, default=next_id)
+    image_type = db.Column(db.String(20))
+    url = db.Column(db.String(100))
     created_at = db.Column(db.Float, default=time.time)
     private = db.Column(db.Boolean)

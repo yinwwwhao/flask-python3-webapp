@@ -9,8 +9,9 @@ logging.info('api/comment.py started.')
 
 @app.route('/api/comments/<id>/delete', methods=['POST'])
 def delete_comment(id):
-    if check_admin():
-        return check_admin()
+    admin = check_admin()
+    if admin:
+        return APIPermissionError('permission error')
     Comment.query.filter(Comment.id == id).delete()
     db.session.commit()
     return Message('delete ok')

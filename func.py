@@ -7,7 +7,7 @@ from app.models import User
 import smtplib
 import time
 import hashlib
-#from configs import smtp_server, from_addr, password
+from configs import smtp_server, from_addr, password
 
 
 COOKIE_NAME = 'awesession'
@@ -81,10 +81,11 @@ def check_admin():
     user = get_user()
     if not user:
         return redirect('/signin')
-    elif user.admin != True:
+    if user.admin != True:
         return abort(403)
     else:
-        return ''
+        return None
+
 
 
 def get_user():

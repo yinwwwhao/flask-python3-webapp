@@ -1,5 +1,5 @@
 from app.apis import apis_blueprint as app
-from app.apis._message import APIValueError, Message
+from app.apis._message import APIValueError, Message, APIPermissionError
 from func import check_admin, datetime_filter, get_user
 from flask import request, abort
 from app.models import Blog, db, Comment
@@ -10,8 +10,9 @@ logging.info('api/blog.py started.')
 
 @app.route('/api/blogs/<id>/delete', methods=['POST'])
 def delete_blog(id):
-    if check_admin():
-        return check_admin()
+    admin = check_admin()
+    if admin:
+        return APIPermissionError('permission error')
     Blog.query.filter(Blog.id == id).delete()
     Comment.query.filter(Comment.blog_id == id).delete()
     db.session.commit()
@@ -23,10 +24,11 @@ def api_get_blog(id):
     return blog
 
 @app.route('/api/blogs', methods=['GET', 'POST'])
-def blog():
+def api_get_blogs():
     if request.method == 'POST':
-        if check_admin():
-            return check_admin()
+        admin = check_admin()
+        if admin:
+            return APIPermissionError('permission error')
         user = get_user()
         if not user:
             return abort(403)
