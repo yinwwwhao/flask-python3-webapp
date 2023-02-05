@@ -5,4 +5,4 @@ __pycache__/
 *.log
 
 .vscode/
-app/static/images/atlas
+app/static/images/atlas/
