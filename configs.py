@@ -13,3 +13,4 @@ SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{host}:{
 SECRET_KEY = 'aF1!fB2}cC'
 
 PERMANENT_SESSION_LIFETIME = timedelta(days=1)
+
